@@ -1,0 +1,21 @@
+Package: KeyGenes
+Type: Package
+Title: Transciptional profile based sample class (tissue) identification
+Version: 0.1
+Date: 2018-09-20
+Authors@R: c(
+	person("Davy", "Cats", email="d.cats@lumc.nl", role="cre"))
+Maintainer: Davy Cats <davycats.dc@lumc.nl>
+Description: KeyGenes is an algorithm to predict the identity and determines 
+	identity scores of queried samples (test set) to a provided group of
+	samples (training set). It uses transcriptional profiles of the queried
+	data (test set) and matches them to sets of transcriptional profiles of
+	organs or cell types (training set). KeyGenes uses a 10-fold cross
+	validation on the basis of a LASSO (Least Absolute Shrinkage and
+	Selection Operator) regression available in the R package “glmnet”
+	(Friedman et al., 2010).
+License: ???
+Imports: glmnet, limma
+Suggests: ggplots2, SummarizedExperiment
+RoxygenNote: 6.0.1
+Encoding: UTF-8

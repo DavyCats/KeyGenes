@@ -1,0 +1,22 @@
+class for results
+	- genes for each tissue
+	- cvfit
+	- folids? already in cvfit...
+	- prediction matrix
+	- results table
+	- accuracy
+	
+data objects with training data
+	- fetal
+		- T1
+		- T2
+	- adult	
+
+topGenes function
+
+NGS keygenes function
+
+MA keygenes function (need test data)
+
+ploting function
+
