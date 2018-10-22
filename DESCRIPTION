@@ -16,6 +16,6 @@ Description: KeyGenes is an algorithm to predict the identity and determines
 	(Friedman et al., 2010).
 License: ???
 Imports: glmnet, limma
-Suggests: ggplots2, SummarizedExperiment
+Suggests: ggplot2, reshape2, SummarizedExperiment
 RoxygenNote: 6.0.1
 Encoding: UTF-8

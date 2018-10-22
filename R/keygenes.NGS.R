@@ -14,13 +14,13 @@
 keygenes.NGS <- function(test, train, train.classes, genes=NULL,
                         test.classes=NULL, verbose=FALSE) {
     if (extends(class(train), "SummarizedExperiment")) {
-        require(SummarizedExperiment)
+        suppressPackageStartupMessages(require(SummarizedExperiment))
         train.classes <- as.character(colData(train)[,train.classes])
         train <- assay(train)
     }
     
     if (extends(class(test), "SummarizedExperiment")) {
-        require(SummarizedExperiment)
+        suppressPackageStartupMessages(require(SummarizedExperiment))
         if (!is.null(test.classes)) test.classes <- as.character(
             colData(test)[,test.classes])
         test <- assay(test)

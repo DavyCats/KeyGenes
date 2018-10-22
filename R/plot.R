@@ -9,7 +9,8 @@
 #'
 #' @examples blah
 keygenes.heatmap <- function(data, clusterTissues=F, clusterSamples=F){
-    require(ggplot2)
+    suppressPackageStartupMessages(require(ggplot2))
+    suppressPackageStartupMessages(require(reshape2))
     
     if (!extends(class(data), "KeyGenesResults")){
         stop("data needs to be a KeyGenesResults object!")
