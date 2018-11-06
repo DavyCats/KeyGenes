@@ -39,3 +39,40 @@ keygenes.heatmap <- function(data, clusterTissues=F, clusterSamples=F){
                    axis.ticks = element_blank())
     g
 }
+
+#' Title
+#'
+#' @param data blah
+#' @param clusterTissues blah
+#' @param clusterSamples  blah
+#'
+#' @return blah
+#' @export
+#'
+#' @examples blah
+keygenes.dendrogram <- function(data, classes=NULL){
+    suppressPackageStartupMessages(library(ggdendro))
+    
+    if (is.null(classes)) classes <- data@train.classes
+    uniqueClasses <- unique(classes)
+    
+    genes <- unique(unlist(data@class.genes))
+    
+    meansPerClass <- apply(data@train, 2, function(x) {
+        out <- c(rep(0, times=length(uniqueClasses)))
+        names(out) <- uniqueClasses
+        for (y in uniqueClasses) {
+            out[y] <- mean(x[classes == y])
+        }
+        out
+    })
+    meansPerClass <- t(meansPerClass)
+    
+    countsAndMeans <- cbind(meansPerClass[genes,], t(data@test)[genes,])
+    #countsAndMeans <- voom(as.matrix(countsAndMeans))$E
+    
+    corr <- cor(countsAndMeans, method="pearson")
+    dis <- dist(corr)
+    hc <- hclust(dis)
+    ggdendrogram(hc, rotate=T)
+}

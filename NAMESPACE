@@ -2,6 +2,7 @@
 
 export(keygenes.NGS)
 export(keygenes.NGS.run)
+export(keygenes.dendrogram)
 export(keygenes.heatmap)
 export(mostVariableGenes)
 exportClasses(KeyGenesResults)
