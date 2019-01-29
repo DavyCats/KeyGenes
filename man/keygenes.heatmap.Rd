@@ -2,23 +2,26 @@
 % Please edit documentation in R/plot.R
 \name{keygenes.heatmap}
 \alias{keygenes.heatmap}
-\title{Title}
+\title{Keygenes heatmap}
 \usage{
-keygenes.heatmap(data, clusterTissues = F, clusterSamples = F)
+keygenes.heatmap(data, clusterClasses = F, clusterSamples = F)
 }
 \arguments{
-\item{data}{blah}
+\item{data}{A KeyGenesResults containing prediction results.}
 
-\item{clusterTissues}{blah}
+\item{clusterClasses}{Whether or not to cluster the classes. Defaults to FALSE.}
 
-\item{clusterSamples}{blah}
+\item{clusterSamples}{Whether or not to cluster the samples. Defaults to FALSE.}
 }
 \value{
-blah
+A ggplot displaying a heatmap of the predictions.
 }
 \description{
-Title
+Draw a heatmap for KeyGenes results.
 }
 \examples{
-blah
+data(adult)
+data(fetal_wo)
+result <- keygenes.NGS(adult, fetal_wo, "tissue")
+keygenes.heatmap(result)
 }

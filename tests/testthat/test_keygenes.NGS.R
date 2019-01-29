@@ -4,15 +4,19 @@ data("fetal_wo")
 data("adult")
 
 test_that("internal run function", {
-    train <- SummarizedExperiment::assay(fetal_wo)
-    test <- SummarizedExperiment::assay(adult)
+    train <- SummarizedExperiment::assay(adult)
+    test <- SummarizedExperiment::assay(fetal_wo)
     train_tissues <- as.character(SummarizedExperiment::colData(
-        fetal_wo)$tissue)
-    test_tissues <- as.character(SummarizedExperiment::colData(adult)$tissue)
+        adult)$tissue)
+    test_tissues <- as.character(SummarizedExperiment::colData(fetal_wo)$tissue)
+    
+    input_samples <- which(! train_tissues %in% c("skin", "muscle"))
+    input_tissues <- train_tissues[input_samples]
     input_genes <- rownames(test)[1:500]
     
-    result <- keygenes.NGS.run(test, train, train_tissues, input_genes,
-                     test_tissues)
+    result <- keygenes.NGS.run(test[input_genes,],
+                               train[input_genes,input_samples], 
+                               input_tissues, input_genes, test_tissues)
     # correct types
     expect(extends(class(result), "KeyGenesResults"))
     expect(extends(class(result@cvfit), "cv.glmnet"))
@@ -26,10 +30,11 @@ test_that("internal run function", {
     expect(all(apply(result@prediction.matrix, 2, function(x){min(x) != max(x)})))
     
     # correct tissues
-    expect(all(result@train.classes == train_tissues))
+    expect(all(result@train.classes == input_tissues))
     expect(all(result@test.classes == test_tissues))
     
     # TODO train and test should not equal input (should have been normalized/filtered)
+    # TODO duplicated samples
 })
 
 test_that("SE input, no genes, no truth", {

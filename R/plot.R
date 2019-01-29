@@ -1,14 +1,20 @@
-#' Title
+#' Keygenes heatmap
+#' 
+#' Draw a heatmap for KeyGenes results.
 #'
-#' @param data blah
-#' @param clusterTissues blah
-#' @param clusterSamples  blah
+#' @param data A KeyGenesResults containing prediction results.
+#' @param clusterClasses Whether or not to cluster the classes. Defaults to FALSE.
+#' @param clusterSamples Whether or not to cluster the samples. Defaults to FALSE.
 #'
-#' @return blah
+#' @return A ggplot displaying a heatmap of the predictions.
 #' @export
 #'
-#' @examples blah
-keygenes.heatmap <- function(data, clusterTissues=F, clusterSamples=F){
+#' @examples 
+#' data(adult)
+#' data(fetal_wo)
+#' result <- keygenes.NGS(adult, fetal_wo, "tissue")
+#' keygenes.heatmap(result)
+keygenes.heatmap <- function(data, clusterClasses=F, clusterSamples=F){
     suppressPackageStartupMessages(require(ggplot2))
     suppressPackageStartupMessages(require(reshape2))
     
@@ -18,8 +24,8 @@ keygenes.heatmap <- function(data, clusterTissues=F, clusterSamples=F){
     
     pred.final <- data@prediction.matrix
     
-    if (clusterTissues || clusterSamples) scaled <- scale(data@prediction.matrix)
-    if (clusterTissues) {
+    if (clusterClasses || clusterSamples) scaled <- scale(data@prediction.matrix)
+    if (clusterClasses) {
         ord <- hclust( dist(scaled, method = "euclidean"), method = "ward.D" )$order
         pred.final <- pred.final[ord,]
     }
@@ -40,20 +46,24 @@ keygenes.heatmap <- function(data, clusterTissues=F, clusterSamples=F){
     g
 }
 
-#' Title
+#' KeyGenes dendrogram
+#' 
+#' Draw a dendrogram for KeyGenes results.
 #'
-#' @param data blah
-#' @param clusterTissues blah
-#' @param clusterSamples  blah
+#' @param data A KeyGenesResults containing prediction results.
 #'
-#' @return blah
+#' @return A ggplot displaying a dendrogram of the training and test data.
 #' @export
 #'
-#' @examples blah
-keygenes.dendrogram <- function(data, classes=NULL){
+#' @examples
+#' #' data(adult)
+#' data(fetal_wo)
+#' result <- keygenes.NGS(adult, fetal_wo, "tissue")
+#' keygenes.dendrogram(result)
+keygenes.dendrogram <- function(data) {
     suppressPackageStartupMessages(library(ggdendro))
     
-    if (is.null(classes)) classes <- data@train.classes
+    classes <- data@train.classes
     uniqueClasses <- unique(classes)
     
     genes <- unique(unlist(data@class.genes))

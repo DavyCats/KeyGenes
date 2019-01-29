@@ -3,37 +3,31 @@
 \docType{class}
 \name{KeyGenesResults-class}
 \alias{KeyGenesResults-class}
-\title{Title}
-\value{
-blah
-}
+\title{KeyGenes prediction results}
 \description{
-Title
+KeyGenes prediction results
 }
 \section{Slots}{
 
 \describe{
-\item{\code{result}}{data.frame.}
+\item{\code{result}}{data.frame. The predictions.}
 
-\item{\code{accuracy}}{numeric.}
+\item{\code{accuracy}}{numeric.  Accuracy of the predictions or NaN.}
 
-\item{\code{cvfit}}{ANY.}
+\item{\code{cvfit}}{ANY. The model used for the predictions.}
 
-\item{\code{class.genes}}{list.}
+\item{\code{class.genes}}{list. The key genes for each class.}
 
-\item{\code{prediction.matrix}}{matrix.}
+\item{\code{prediction.matrix}}{matrix. The raw prediction values.}
 
-\item{\code{train}}{matrix.}
+\item{\code{train}}{matrix. The final effective training set.}
 
-\item{\code{train.classes}}{character.}
+\item{\code{train.classes}}{character. The classes for each sample in the training set.}
 
-\item{\code{test}}{matrix.}
+\item{\code{test}}{matrix. The final effective test set.}
 
-\item{\code{test.classes}}{OptionalChar.}
+\item{\code{test.classes}}{OptionalChar.  The classes for the test set.}
 
-\item{\code{genes}}{character.}
+\item{\code{genes}}{character. The genes used for training and prediction.}
 }}
 
-\examples{
-blah
-}

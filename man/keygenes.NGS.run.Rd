@@ -2,30 +2,31 @@
 % Please edit documentation in R/keygenes.NGS.R
 \name{keygenes.NGS.run}
 \alias{keygenes.NGS.run}
-\title{Title}
+\title{Predict the class (eg. tissue) for NGS sample}
 \usage{
 keygenes.NGS.run(test, train, train.classes, genes, test.classes,
   verbose = FALSE)
 }
 \arguments{
-\item{test}{blah}
+\item{test}{A matrix of expression measures for the test set}
 
-\item{train}{blah}
+\item{train}{A matrix of expression measures for the training set}
 
-\item{train.classes}{blah}
+\item{train.classes}{A vector with the classes of the training samples. Each
+sample from the test set will be assigned to one of these}
 
-\item{genes}{blah}
+\item{genes}{The genes to be used for training and testing}
 
-\item{test.classes}{blah}
+\item{test.classes}{A vector with the classes of the test samples. Used to
+calculate accuracy. May be NULL}
 
-\item{verbose}{blah}
+\item{verbose}{Should progress be reported, defaults to FALSE}
 }
 \value{
-blah
+A  \link[KeyGenes]{KeyGenesResults} object containing the prediction 
+results.
 }
 \description{
-Title
-}
-\examples{
-blah
+Predict the class (eg. tissue or maturation) for the test samples based on
+a set of training samples, using RNA-seq expression measures.
 }
