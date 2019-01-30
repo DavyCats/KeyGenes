@@ -53,7 +53,7 @@ keygenes.NGS <- function(test, train, train.classes, genes=NULL,
     drop <- names(which(table(train.classes) < 2))
     for (x in drop) warning("Not enough samples in training data for class '",
                             x, "', will be dropped")
-    train <- train[! train.classes %in% drop,]
+    train <- train[,! train.classes %in% drop]
     train.classes <- train.classes[! train.classes %in% drop]
     
     if (is.null(genes)) {
