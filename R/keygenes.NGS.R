@@ -56,6 +56,12 @@ keygenes.NGS <- function(test, train, train.classes, genes=NULL,
     train <- train[,! train.classes %in% drop]
     train.classes <- train.classes[! train.classes %in% drop]
     
+    # stop if not enough training samples
+    # We need at least 10 to ensure we can make 10 folds for cross validation
+    if (length(train.classes) < 10)
+        stop("need at least 10 training samples for cross validation, got ",
+             length(train.classes))
+
     if (is.null(genes)) {
         if (verbose) message("Determining most variable genes")
         genes <- mostVariableGenes(train, n=500)
@@ -114,6 +120,8 @@ keygenes.NGS.run <- function(test, train, train.classes, genes,
                       function(i, f, m, l, n) {
                           not.in.fold <- table(m[f != i])
                           if ( ! all(train.classes %in% names(not.in.fold))) 
+                              return(T)
+                          if ( length(m[f==i]) == 0 )
                               return(T)
                           any(not.in.fold[n] < 2) | any(not.in.fold[l] < 1)
                       },
