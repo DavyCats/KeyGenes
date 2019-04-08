@@ -1,8 +1,8 @@
 #' Get top n most variable genes
 #' 
 #' Retrieve the list of genes identifiers for the genes which have the most 
-#' variable expression in the given counts. Rownames of the given count matrix
-#' are assumed to be gene identifiers.
+#' variable expression in the given counts (based on voom normalized counts).
+#' Rownames of the given count matrix are assumed to be gene identifiers.
 #' @param counts A numeric matrix containing raw expression counts.
 #' @param n The number of genes to be returned. Defaults to 500.
 #'

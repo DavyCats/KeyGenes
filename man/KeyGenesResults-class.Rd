@@ -29,5 +29,8 @@ KeyGenes prediction results
 \item{\code{test.classes}}{OptionalChar.  The classes for the test set.}
 
 \item{\code{genes}}{character. The genes used for training and prediction.}
+
+\item{\code{duplicated.sample}}{integer. The indexes of the samples which which were
+duplicated in order to have a enough samples per class for training the model.}
 }}
 

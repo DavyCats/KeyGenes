@@ -16,8 +16,8 @@ A vector containing gene identifiers.
 }
 \description{
 Retrieve the list of genes identifiers for the genes which have the most 
-variable expression in the given counts. Rownames of the given count matrix
-are assumed to be gene identifiers.
+variable expression in the given counts (based on voom normalized counts).
+Rownames of the given count matrix are assumed to be gene identifiers.
 }
 \examples{
 top500 <- mostVariableGenes(counts)

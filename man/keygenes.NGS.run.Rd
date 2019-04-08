@@ -2,7 +2,7 @@
 % Please edit documentation in R/keygenes.NGS.R
 \name{keygenes.NGS.run}
 \alias{keygenes.NGS.run}
-\title{Predict the class (eg. tissue) for NGS sample}
+\title{Predict the class (eg. organ) for NGS (RNA-seq) samples}
 \usage{
 keygenes.NGS.run(test, train, train.classes, genes, test.classes,
   verbose = FALSE)
@@ -27,6 +27,6 @@ A  \link[KeyGenes]{KeyGenesResults} object containing the prediction
 results.
 }
 \description{
-Predict the class (eg. tissue or maturation) for the test samples based on
+Predict the class (eg. organ or maturation) for the test samples based on
 a set of training samples, using RNA-seq expression measures.
 }

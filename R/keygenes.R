@@ -12,6 +12,8 @@ setClassUnion("OptionalChar",   c("character",   "logical"))
 #' @slot test matrix. The final effective test set.
 #' @slot test.classes OptionalChar.  The classes for the test set.
 #' @slot genes character. The genes used for training and prediction.
+#' @slot duplicated.sample integer. The indexes of the samples which which were
+#' duplicated in order to have a enough samples per class for training the model.
 #'
 #' @export
 #' @import glmnet

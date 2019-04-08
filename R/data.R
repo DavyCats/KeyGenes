@@ -1,34 +1,29 @@
-#' Fetal tissues
+#' Training data
 #' 
-#' A dataset containing expression measures for different fetal tissues. Includes
-#' samples from 1st and 2nd trimester.
+#' A dataset containing expression measures for different organs at different
+#' stages of maturity. Containg hESC samples (Forster et al., 2014; Roost et 
+#' al., 2015), 1st and 2nd trimester fetal samples (Roost et al., 2015) and 
+#' adult samples (Cnop et al., 2014; Fagerberg et al., 2014; Illumina Body Map
+#' 2.0). Counts may not be available for all genes for all samples.
 #'
 #' @docType data
-#' @name fetal_wo
-#' @usage data(fetal_wo)
+#' @name training.data
+#' @usage data(training.data)
 #'
 #' @format An object of class \code{"SummarizedExperiment"}; see 
 #' \code{\link[SummarizedExperiment]{SummarizedExperiment}}.
 #'
 #' @keywords datasets
 #' @examples
-#' data(fetal_wo)
-#' fetal_wo
-"fetal_wo"
-
-#' Adult tissues
+#' data(training.data)
+#' training.data
 #' 
-#' A dataset containing expression measures for different adult tissues.
-#'
-#' @docType data
-#' @name adult
-#' @usage data(adult)
-#'
-#' @format An object of class \code{"SummarizedExperiment"}; see 
-#' \code{\link[SummarizedExperiment]{SummarizedExperiment}}.
-#'
-#' @keywords datasets
-#' @examples
-#' data(adult)
-#' adult
-"adult"
+#' # Get only those genes for which each sample has a value.
+#' training.data[complete.cases(assay(training.data)),]
+#' 
+#' @references 
+#' Cnop, M., Abdulkarim, B., Bottu, G., Cunha, D.A., Igoillo-Esteve, M., Masini, M., Turatsinze, J.V., Griebel, T., Villate, O., Santin, I., et al. (2014). RNA sequencing identifies dysregulation of the human pancreatic islet transcriptome by the saturated fatty acid palmitate. Diabetes. 63(6): 1978-1993. \cr
+#' Fagerberg, L., Hallstrom, B.M., Oksvold, P., Kampf, C., Djureinovic, D., Odeberg, J., Habuka, M., Tahmasebpoor, S., Danielsson, A., Edlund, K., et al. (2014). Analysis of the human tissue-specific expression by genome-wide integration of transcriptomics and antibody-based proteomics. Molecular & cellular proteomics: MCP. 13(2): 397-406. \cr
+#' Forster R., Chiba K., Shaeffer L., Regalado S.G., Lai C.S., Gao Q., Kiani S., Farin H.F., Clevers H., Cost G.J., et al. (2014) Human intestinal tissue with adult stem cell properties derived from pluripotent stem cells. Stem cell reports. 2(6): 838-852. \cr
+#' Roost M.S., van Iperen L., Ariyurek Y., Buermans H.P., Arindrarto W., Devalla H.D., Passier R., Mummery C.L., Carlotti F., de Koning E.J.P., van Zwet E.W., Goeman J.J., and Chuva de Sousa Lopes S.M. (2015). KeyGenes, a tool to probe tissue differentiation using a human fetal transcriptional atlas. Stem Cell Reports. 4(6):1112-24. \cr
+"training.data"

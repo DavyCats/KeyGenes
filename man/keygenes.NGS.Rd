@@ -2,7 +2,7 @@
 % Please edit documentation in R/keygenes.NGS.R
 \name{keygenes.NGS}
 \alias{keygenes.NGS}
-\title{Predict the class (eg. tissue) for NGS sample}
+\title{Predict the class (eg. organ) for NGS (RNA-seq) samples}
 \usage{
 keygenes.NGS(test, train, train.classes, genes = NULL, test.classes = NULL,
   verbose = FALSE)
@@ -17,24 +17,24 @@ containing it.}
 \item{train.classes}{The class each sample in the training set belongs to.
 Each sample from the test set will be assigned to one of these. Normally a
 character vector with one item per train sample, if `train` is a 
-SummarizedExperiment the column containg the classes.}
+SummarizedExperiment the colData column containing the classes.}
 
 \item{genes}{The genes to be used for training and testing. If NULL
 \link[KeyGenes]{mostVariableGenes} will be called wih n = 500. Defaults to
 NULL}
 
-\item{test.classes}{See train.classes, except for the test samples. Used to
+\item{test.classes}{See train.classes, but for the test samples. Used to
 calculate the accuracy of the predictions. If NULL the accuracy will be NaN.
 Defaults to NULL}
 
 \item{verbose}{Should progress be reported, defaults to FALSE}
 }
 \value{
-A  \link[KeyGenes]{KeyGenesResults} object containing the prediction 
+A \link[KeyGenes]{KeyGenesResults} object containing the prediction 
 results.
 }
 \description{
-Predict the class (eg. tissue or maturation) for the test samples based on
+Predict the class (eg. organ or maturation) for the test samples based on
 a set of training samples, using RNA-seq expression measures.
 }
 \examples{

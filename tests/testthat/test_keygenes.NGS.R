@@ -1,44 +1,45 @@
 context("keygenes NGS")
 
-data("fetal_wo")
-data("adult")
+data("training.data")
+training.data <- training.data[complete.cases(SummarizedExperiment::assay(training.data)),]
+train.se <- training.data[,training.data$age == "Adult"]
+train.se <- train.se[, ! train.se$organ %in% c("muscle", "skin")]
+test.se <- training.data[,training.data$age %in% c("1st trimester", "2nd trimester")]
+train <- SummarizedExperiment::assay(train.se)
+test <- SummarizedExperiment::assay(test.se)
 
 test_that("internal run function", {
-    train <- SummarizedExperiment::assay(adult)
-    test <- SummarizedExperiment::assay(fetal_wo)
-    train_tissues <- as.character(SummarizedExperiment::colData(
-        adult)$tissue)
-    test_tissues <- as.character(SummarizedExperiment::colData(fetal_wo)$tissue)
+    train.organs <- as.character(SummarizedExperiment::colData(train.se)$organ)
+    test.organs <- as.character(SummarizedExperiment::colData(test.se)$organ)
     
-    input_samples <- which(! train_tissues %in% c("skin", "muscle"))
-    input_tissues <- train_tissues[input_samples]
-    input_genes <- rownames(test)[1:500]
+    common.genes <- intersect(rownames(train), row.names(test))
     
-    result <- keygenes.NGS.run(test[input_genes,],
-                               train[input_genes,input_samples], 
-                               input_tissues, input_genes, test_tissues)
+    result <- keygenes.NGS.run(test[common.genes,1:5],
+                               train[common.genes,], 
+                               train.organs, common.genes[1:500], test.organs[1:5])
+    
     # correct types
     expect(extends(class(result), "KeyGenesResults"))
     expect(extends(class(result@cvfit), "cv.glmnet"))
     
     # correct genes
-    expect(all(sapply(result@class.genes, function(x){all(x %in% input_genes)})))
-    expect(all(result@genes == input_genes))
+    expect(all(sapply(result@class.genes, function(x){all(x %in% common.genes[1:500])})))
+    expect(all(result@genes == common.genes[1:500]))
     
     # make sure it doesn't resort to an intercept
     expect(all(apply(result@prediction.matrix, 1, function(x){min(x) != max(x)})))
     expect(all(apply(result@prediction.matrix, 2, function(x){min(x) != max(x)})))
     
-    # correct tissues
-    expect(all(result@train.classes == input_tissues))
-    expect(all(result@test.classes == test_tissues))
+    # correct organs
+    expect(all(result@train.classes == train.organs))
+    expect(all(result@test.classes == test.organs[1:5]))
     
     # TODO train and test should not equal input (should have been normalized/filtered)
     # TODO duplicated samples
 })
 
 test_that("SE input, no genes, no truth", {
-    result <- keygenes.NGS(adult, fetal_wo, "tissue")
+    result <- keygenes.NGS(test.se, train.se, "organ")
     
     # truth should be empty
     expect(all(is.na(result@result$truth)))
@@ -51,7 +52,7 @@ test_that("SE input, no genes, no truth", {
 }) 
 
 test_that("SE input, no genes, with truth", {
-    result <- keygenes.NGS(adult, fetal_wo, "tissue", test.classes = "tissue")
+    result <- keygenes.NGS(test.se, train.se, "organ", test.classes = "organ")
     expect(all(!is.na(result@result$truth)))
     expect(!is.nan(result@accuracy))
     
@@ -59,9 +60,9 @@ test_that("SE input, no genes, with truth", {
 }) 
 
 test_that("SE input, with genes, with truth", {
-    result <- keygenes.NGS(adult, fetal_wo, "tissue", 
-                         genes = rownames(fetal_wo)[1:500], 
-                         test.classes = "tissue")
+    result <- keygenes.NGS(test.se, train.se, "organ", 
+                         genes = rownames(train.se)[1:500], 
+                         test.classes = "organ")
     expect(all(!is.na(result@result$truth)))
     expect(!is.nan(result@accuracy))
     

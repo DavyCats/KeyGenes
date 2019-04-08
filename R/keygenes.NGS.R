@@ -1,6 +1,6 @@
-#' Predict the class (eg. tissue) for NGS sample
+#' Predict the class (eg. organ) for NGS (RNA-seq) samples
 #'
-#' Predict the class (eg. tissue or maturation) for the test samples based on
+#' Predict the class (eg. organ or maturation) for the test samples based on
 #' a set of training samples, using RNA-seq expression measures.
 #'
 #' @param test The counts table of the test data or a SummarizedExperiment 
@@ -10,16 +10,16 @@
 #' @param train.classes The class each sample in the training set belongs to.
 #' Each sample from the test set will be assigned to one of these. Normally a
 #' character vector with one item per train sample, if `train` is a 
-#' SummarizedExperiment the column containg the classes.
+#' SummarizedExperiment the colData column containing the classes.
 #' @param genes The genes to be used for training and testing. If NULL
 #' \link[KeyGenes]{mostVariableGenes} will be called wih n = 500. Defaults to
 #' NULL
-#' @param test.classes See train.classes, except for the test samples. Used to
+#' @param test.classes See train.classes, but for the test samples. Used to
 #' calculate the accuracy of the predictions. If NULL the accuracy will be NaN.
 #' Defaults to NULL 
 #' @param verbose Should progress be reported, defaults to FALSE
 #'
-#' @return A  \link[KeyGenes]{KeyGenesResults} object containing the prediction 
+#' @return A \link[KeyGenes]{KeyGenesResults} object containing the prediction 
 #' results.
 #' @export
 #'
@@ -77,9 +77,9 @@ keygenes.NGS <- function(test, train, train.classes, genes=NULL,
 }
 
 
-#' Predict the class (eg. tissue) for NGS sample
+#' Predict the class (eg. organ) for NGS (RNA-seq) samples
 #'
-#' Predict the class (eg. tissue or maturation) for the test samples based on
+#' Predict the class (eg. organ or maturation) for the test samples based on
 #' a set of training samples, using RNA-seq expression measures.
 #'
 #' @param test A matrix of expression measures for the test set
