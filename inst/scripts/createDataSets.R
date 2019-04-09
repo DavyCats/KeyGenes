@@ -3,12 +3,12 @@ hESC.data <- read.table(hESC, sep="\t", header=TRUE, row.names=1,
                         check.names=FALSE)[,c("DH3.hES_Stem Cells",
                                               "DH6.hES_Stem Cells",
                                               "DH7.hES_Stem Cells")]
-colnames(hESC.data) <- c("hESC Stem Cells.DH3", "hESC Stem Cells.DH6",
-                         "hESC Stem Cells.DH7")
+colnames(hESC.data) <- c("hESC stem cells.DH3", "hESC stem cells.DH6",
+                         "hESC stem cells.DH7")
 hESC2 <- "sourceData/hESC/2013-11-04_combined_all_data.csv"
 hESC2.data <- read.table(hESC2, sep=",", header=TRUE, row.names=1,
                          check.names=FALSE)[, "set_3_B6_GCCAAT_L005", drop=F]
-colnames(hESC2.data) <- "hESC Stem Cells.1"
+colnames(hESC2.data) <- "hESC stem cells.1"
 fetal <- "sourceData/human_fetal/training_fetal.txt"
 fetal.data <- read.table(fetal, sep="\t", header=TRUE, row.names=1,
                          check.names=FALSE)
@@ -46,7 +46,7 @@ coldata <- data.frame(row.names = colnames(all.counts))
 coldata[grepl("_9", colnames(all.counts)), "age"] <- "1st trimester"
 coldata[grepl("_(22|16-18)", colnames(all.counts)), "age"] <- "2nd trimester"
 coldata[grepl("_adult", colnames(all.counts)), "age"] <- "Adult"
-coldata[grepl("hESC Stem Cells", colnames(all.counts)), "age"] <- "hESC stem cells"
+coldata[grepl("hESC stem cells", colnames(all.counts)), "age"] <- "hESC stem cells"
 
 # organ
 organs <- sapply(strsplit(colnames(all.counts), "_"), "[[", 1)

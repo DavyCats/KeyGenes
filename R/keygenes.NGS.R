@@ -56,12 +56,6 @@ keygenes.NGS <- function(test, train, train.classes, genes=NULL,
     train <- train[,! train.classes %in% drop]
     train.classes <- train.classes[! train.classes %in% drop]
     
-    # stop if not enough training samples
-    # We need at least 10 to ensure we can make 10 folds for cross validation
-    if (length(train.classes) < 10)
-        stop("need at least 10 training samples for cross validation, got ",
-             length(train.classes))
-
     if (is.null(genes)) {
         if (verbose) message("Determining most variable genes")
         genes <- mostVariableGenes(train, n=500)
@@ -113,10 +107,13 @@ keygenes.NGS.run <- function(test, train, train.classes, genes,
     
     # determine folds
     if (verbose) message("Determining folds")
+    n.folds <- min(c(10, length(train.classes)))
+    if (verbose) message("Number of folds: ", n.folds)
     lacking.classes <- names(which(table(train.classes) < 3))
     not.lacking.classes <- names(which(table(train.classes) > 2))
-    fold.id <- sample(rep(1:10, length(train.classes)), length(train.classes))
-    while (any(sapply(1:10, 
+    fold.id <- sample(rep(1:n.folds, length(train.classes)), 
+                      length(train.classes))
+    while (any(sapply(1:n.folds, 
                       function(i, f, m, l, n) {
                           not.in.fold <- table(m[f != i])
                           if ( ! all(train.classes %in% names(not.in.fold))) 
@@ -128,7 +125,7 @@ keygenes.NGS.run <- function(test, train, train.classes, genes,
                       fold.id, train.classes, lacking.classes,
                       not.lacking.classes))) {
         if (verbose) message("...problematic class distribution, retrying")
-        fold.id <- sample(rep(1:10, length(train.classes)), 
+        fold.id <- sample(rep(1:n.folds, length(train.classes)), 
                           length(train.classes))
     }
     
@@ -149,8 +146,9 @@ keygenes.NGS.run <- function(test, train, train.classes, genes,
     
     # create the model
     if (verbose) message("fitting model")
-    cvfit <- cv.glmnet(as.matrix(final.train), final.train.classes, 
-                       family="multinomial", foldid = final.fold.id)
+    cvfit <- cv.glmnet(as.matrix(final.train), final.train.classes,
+                       nfolds=n.folds, family="multinomial",
+                       foldid = final.fold.id)
     
     # determine keyGenes for each class
     if (verbose) message("Retrieving key genes")

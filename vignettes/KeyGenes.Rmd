@@ -1,0 +1,261 @@
+---
+title: "KeyGenes"
+package: "KeyGenes"
+author: 
+- name: "Davy Cats"
+  affiliation: 
+  - "Sequencing Analysis Support Core, Department of Biomedical Data Sciences, Leiden University Medical Center, Leiden, The Netherlands"
+  email: d.cats@lumc.nl
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: true
+    toc_float:
+      collapsed: false
+vignette: >
+  %\VignetteIndexEntry{Keygenes}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(KeyGenes)
+library(SummarizedExperiment)
+library(ggplot2)
+```
+
+# What is KeyGenes #
+KeyGenes is an algorithm to predict the identity and determines identity scores
+of queried samples (test set) based on a provided group of samples (training
+set). It uses transcriptional profiles of the test set and matches them to the
+transcriptional profiles of the training set. KeyGenes uses 10-fold cross
+validation on the basis of LASSO (Least Absolute Shrinkage and Selection
+Operator) regression available in the `glmnet` R-package (Friedman et al., 2010).
+
+# Included training data #
+Included in the KeyGenes package is a collection of RNA-seq count data usable
+for training. These data have been collected in a
+[*SummarizedExperiment*](http://bioconductor.org/packages/SummarizedExperiment/)
+object.
+```{r, training.data}
+library(KeyGenes)
+data("training.data")
+training.data
+```
+
+This dataset contains hESC samples (Forster et al., 2014; Roost et 
+al., 2015), 1st and 2nd trimester fetal samples (Roost et al., 2015) and 
+adult samples (Cnop et al., 2014; Fagerberg et al., 2014; Illumina Body Map
+2.0). Each sample is annotated in the `colData` with their `age` and `organ` of
+origin.
+```{r, samples}
+table(training.data$age)
+table(training.data$organ)
+```
+
+One can use these annotations to select the samples approriate for their use
+case.
+```{r, filtering.samples}
+my.training.set <- training.data[, training.data$age == "2nd trimester"]
+table(my.training.set$age)
+```
+
+Counts may not be available for all genes for all samples. The `complete.cases`
+function can be used to remove genes with missing values.
+```{r, complete.cases}
+library(SummarizedExperiment)
+my.training.set <- my.training.set[complete.cases(assay(my.training.set)),]
+my.training.set
+```
+
+# Running KeyGenes #
+
+The `keygenes.NGS` function canbe used to run the KeyGenes algorithm. The input
+for this function is a `matrix` or `SummarizedExperiment` object for both the
+test and training data, as well as a (character) vector either giving the class
+(eg. organ) for each sample in the training data or the name of the column in
+the `SummarizedExperiment`'s `colData` containing these classes.
+
+```{r, run, warning=FALSE}
+# Make a subset of samples for testing
+set.seed(111)
+test.samples <- sample(1:ncol(my.training.set), 4)
+
+# Run KeyGenes
+result <- keygenes.NGS(my.training.set[, test.samples],
+                       my.training.set[, -test.samples],
+                       "organ")
+```
+
+## The results ##
+The returned object contains a number of slots. The most important ones are the
+following: `result`, `class.genes` and `prediction.matrix`.
+
+### The result slot ###
+The `result` slot contains the final classifications of the test samples:
+```{r, result}
+result@result
+```
+If we had provided the `test.classes` parameter to the `keygenes.NGS` function,
+the `truth` column would have contained these values and the `accuracy` slot
+would have contained the a percentage of correct predictions.
+
+### The class.genes slot ###
+The `class.genes` slot contains the key genes in the classification. For each
+class, the genes which had an effect on the prediction (a coeficient larger 
+than 0) is returned.
+```{r, class.genes}
+result@class.genes
+```
+
+### The prediction.matrix slot ###
+The `prediction.matrix` slot contains linear predictor values. The final
+predictions are chosen by picking the class with the highest value for each
+sample.
+```{r, prediction.matrix}
+result@prediction.matrix
+```
+
+## Plotting the predictions ##
+The predictions can be visualized using the `keygenes.heatmap` function. This
+will draw a heatmap based on the `prediction.matrix`.
+```{r, heatmap}
+keygenes.heatmap(result)
+```
+
+# A more complex example #
+In many cases it will be hard to tell exactly what data from the training set
+is most approriate for our test data. For example, when differentiating stem 
+cell it is unknow whether the resulting cells are more akin to fetal or adult 
+cells and this might differ between samples, depending on the timepoints which
+are measured.
+
+## Predicting age ##
+In order to select the appropriate training data for each sample, the age of
+each sample is predicted first.
+```{r, age, warning=FALSE}
+# Create a test and training set
+set.seed(111)
+training.data <- training.data[complete.cases(assay(training.data)),]
+test.samples <- sample(1:ncol(training.data), 4)
+test.set <- training.data[,test.samples]
+training.set <- training.data[,-test.samples]
+
+# Run KeyGenes
+age.result <- keygenes.NGS(test.set, training.set, "age")
+age.result@result
+```
+
+## Predicting organ ##
+Now that the ages of the samples are known, an appropriate set of test data can
+be selected for predicting the organs.
+```{r, organ, warning=FALSE}
+# Get the possible ages
+ages <- as.character(unique(age.result@result$predicted)) 
+
+# Run KeyGenes for each age category
+organ.results <- sapply(ages, function(age) {
+    # Further predictions for hESC stem cells are not possible!
+    if (age != "hESC stem cells") {
+        # Select the samples for each age.
+        train.subset <- training.set[, training.set$age == age]
+        test.subset <- test.set[, age.result@result$predicted == age]
+        # Test sets need at least two samples
+        if (ncol(test.subset) < 2) {
+            test.subset <- cbind(test.subset, test.subset)
+            colnames(test.subset) <- c(colnames(test.subset)[1], "duplicate")
+        }
+        # Run KeyGenes for each subset.
+        #return(keygenes.NGS(test.subset, train.subset, "organ"))
+        r <- keygenes.NGS(test.subset, train.subset, "organ")
+    }
+})
+names(organ.results) <- ages
+organ.results[sapply(organ.results, is.null)] <- NULL
+
+# Merge the predictions
+all.organs <- organ.results[[1]]@result
+if (length(organ.results) > 1) {
+    for (x in 2:length(organ.results)) {
+        all.organs <- rbind(all.organs, organ.results[[x]]@result)
+    }
+}
+all.organs <- all.organs[rownames(all.organs) != c("duplicate"),]
+all.organs
+```
+
+## Making a heatmap ##
+The following code can be used to generate a heatmap for these results. This
+heatmap will show both the age prediction values and the organ prediction
+values.
+```{r, heatmap.2}
+library(ggplot2)
+
+# 
+melted.prediction.matrix.list <- lapply(names(organ.results), function(age) {
+    # Melt the prediction matrix
+    melted <- melt(organ.results[[age]]@prediction.matrix)
+    # Annotate each value with the age
+    melted["age"] <- age
+    # Label it as a tissue prediction value
+    melted["type"] <- "tissue"
+    melted <- melted[melted$Var2 != "duplicate",]
+})
+
+# Merge all the ages into one table
+melted.prediction.matrix <- melted.prediction.matrix.list[[1]]
+if (length(organ.results) > 1) {
+    for (x in 2:length(organ.results)){
+        melted.prediction.matrix <- rbind(melted.prediction.matrix, 
+                                          melted.prediction.matrix.list[[x]])
+    }
+}
+
+# Melt the age prediction matrix and add it as well.
+melted.ages <- melt(age.result@prediction.matrix)
+melted.ages["age"] <- age.result@result[melted.ages$Var2, "predicted"]
+melted.ages["type"] <- "age"
+melted.prediction.matrix <- rbind(melted.prediction.matrix, melted.ages)
+
+# Plot it
+g <- ggplot(data=melted.prediction.matrix)
+g <- g + theme_minimal()
+g <- g + geom_tile(aes(fill=value, x=Var2, y=Var1), color="gray")
+g <- g + scale_fill_gradient2(low="black", mid="white", high = "green2", 
+                              midpoint = 0.5)
+g <- g + labs(x="", y="")
+g <- g + facet_grid(type~age, space = "free", scales = "free")
+g <- g + theme(axis.text.x = element_text(angle = 90, hjust = 1), 
+               axis.ticks = element_blank())
+g
+```
+
+# SessionInfo #
+```{r, sessioninfo}
+sessionInfo()
+```
+
+# References #
+Cnop, M., Abdulkarim, B., Bottu, G., Cunha, D.A., Igoillo-Esteve, M.,
+Masini, M., Turatsinze, J.V., Griebel, T., Villate, O., Santin, I., et al.
+(2014). RNA sequencing identifies dysregulation of the human pancreatic islet
+transcriptome by the saturated fatty acid palmitate. *Diabetes*. 63(6):
+1978-1993.  
+Fagerberg, L., Hallstrom, B.M., Oksvold, P., Kampf, C., Djureinovic,
+D., Odeberg, J., Habuka, M., Tahmasebpoor, S., Danielsson, A., Edlund,
+K., et al. (2014). Analysis of the human tissue-specific expression by
+genome-wide integration of transcriptomics and antibody-based proteomics.
+*Molecular & cellular proteomics: MCP*. 13(2): 397-406.  
+Forster R., Chiba K., Shaeffer L., Regalado S.G., Lai C.S., Gao Q., Kiani S.,
+Farin H.F., Clevers H., Cost G.J., et al. (2014) Human intestinal tissue with
+adult stem cell properties derived from pluripotent stem cells. *Stem cell
+reports*. 2(6): 838-852.  
+Friedman J., Hastie T., and Tibshirani R. (2010). Regularization paths for 
+generalized linear models via coordinate descent. *Journal of statistical 
+software*. 33(1): 1-22.  
+Roost M.S., van Iperen L., Ariyurek Y., Buermans H.P., Arindrarto W.,
+Devalla H.D., Passier R., Mummery C.L., Carlotti F., de Koning E.J.P.,
+van Zwet E.W., Goeman J.J., and Chuva de Sousa Lopes S.M. (2015). KeyGenes, a
+tool to probe tissue differentiation using a human fetal transcriptional atlas.
+*Stem Cell Reports*. 4(6):1112-24.  
