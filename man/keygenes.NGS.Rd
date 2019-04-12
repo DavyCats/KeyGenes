@@ -20,7 +20,7 @@ character vector with one item per train sample, if `train` is a
 SummarizedExperiment the colData column containing the classes.}
 
 \item{genes}{The genes to be used for training and testing. If NULL
-\link[KeyGenes]{mostVariableGenes} will be called wih n = 500. Defaults to
+\link[KeyGenes]{most.variable.genes} will be called wih n = 500. Defaults to
 NULL}
 
 \item{test.classes}{See train.classes, but for the test samples. Used to

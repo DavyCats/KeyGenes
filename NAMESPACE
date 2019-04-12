@@ -3,7 +3,7 @@
 export(keygenes.NGS)
 export(keygenes.dendrogram)
 export(keygenes.heatmap)
-export(mostVariableGenes)
+export(most.variable.genes)
 exportClasses(KeyGenesResults)
 import(glmnet)
 importFrom(glmnet,cv.glmnet)

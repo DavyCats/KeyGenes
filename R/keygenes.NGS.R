@@ -1,3 +1,23 @@
+# Copyright (c) 2019 Leiden University Medical Center
+# 
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#     
+#     The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+# 
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
 #' Predict the class (eg. organ) for NGS (RNA-seq) samples
 #'
 #' Predict the class (eg. organ or maturation) for the test samples based on
@@ -12,7 +32,7 @@
 #' character vector with one item per train sample, if `train` is a 
 #' SummarizedExperiment the colData column containing the classes.
 #' @param genes The genes to be used for training and testing. If NULL
-#' \link[KeyGenes]{mostVariableGenes} will be called wih n = 500. Defaults to
+#' \link[KeyGenes]{most.variable.genes} will be called wih n = 500. Defaults to
 #' NULL
 #' @param test.classes See train.classes, but for the test samples. Used to
 #' calculate the accuracy of the predictions. If NULL the accuracy will be NaN.
@@ -58,7 +78,7 @@ keygenes.NGS <- function(test, train, train.classes, genes=NULL,
     
     if (is.null(genes)) {
         if (verbose) message("Determining most variable genes")
-        genes <- mostVariableGenes(train, n=500)
+        genes <- most.variable.genes(train, n=500)
     }
     
     if (is.null(test.classes)) {

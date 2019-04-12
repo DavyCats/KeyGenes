@@ -13,22 +13,22 @@
 The DESCRIPTION file:
 \packageDESCRIPTION{KeyGenes}
 \packageIndices{KeyGenes}
-~~ An overview of how to use the package, including the most important functions ~~
 }
 \author{
-\packageAuthor{KeyGenes}
-
 Maintainer: \packageMaintainer{KeyGenes}
 }
 \references{
-~~ Literature or other references for background information ~~
+Friedman J., Hastie T., and Tibshirani R. (2010). Regularization paths for 
+generalized linear models via coordinate descent. \emph{Journal of statistical 
+software}. 33(1): 1-22.
+
+Roost M.S., van Iperen L., Ariyurek Y., Buermans H.P., Arindrarto W., 
+Devalla H.D., Passier R., Mummery C.L., Carlotti F., de Koning E.J.P., 
+van Zwet E.W., Goeman J.J., and Chuva de Sousa Lopes S.M. (2015). KeyGenes, 
+a tool to probe tissue differentiation using a human fetal transcriptional
+atlas. \emph{Stem Cell Reports}. 4(6):1112-24.
 }
-~~ Optionally other standard keywords, one per line, from file KEYWORDS in the R documentation directory ~~
 \keyword{ package }
 \seealso{
-~~ Optional links to other man pages, e.g. ~~
-~~ \code{\link[<pkg>:<pkg>-package]{<pkg>}} ~~
-}
-\examples{
-~~ simple examples of the most important functions ~~
+\code{\link[glmnet:glmnet-package]{glmnet}}
 }

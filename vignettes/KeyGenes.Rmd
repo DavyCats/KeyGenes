@@ -1,3 +1,24 @@
+<!--
+Copyright (c) 2019 Leiden University Medical Center
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+-->
 ---
 title: "KeyGenes"
 package: "KeyGenes"
@@ -241,21 +262,25 @@ Cnop, M., Abdulkarim, B., Bottu, G., Cunha, D.A., Igoillo-Esteve, M.,
 Masini, M., Turatsinze, J.V., Griebel, T., Villate, O., Santin, I., et al.
 (2014). RNA sequencing identifies dysregulation of the human pancreatic islet
 transcriptome by the saturated fatty acid palmitate. *Diabetes*. 63(6):
-1978-1993.  
+1978-1993.
+
 Fagerberg, L., Hallstrom, B.M., Oksvold, P., Kampf, C., Djureinovic,
 D., Odeberg, J., Habuka, M., Tahmasebpoor, S., Danielsson, A., Edlund,
 K., et al. (2014). Analysis of the human tissue-specific expression by
 genome-wide integration of transcriptomics and antibody-based proteomics.
-*Molecular & cellular proteomics: MCP*. 13(2): 397-406.  
+*Molecular & cellular proteomics: MCP*. 13(2): 397-406.
+
 Forster R., Chiba K., Shaeffer L., Regalado S.G., Lai C.S., Gao Q., Kiani S.,
 Farin H.F., Clevers H., Cost G.J., et al. (2014) Human intestinal tissue with
 adult stem cell properties derived from pluripotent stem cells. *Stem cell
-reports*. 2(6): 838-852.  
+reports*. 2(6): 838-852.
+
 Friedman J., Hastie T., and Tibshirani R. (2010). Regularization paths for 
 generalized linear models via coordinate descent. *Journal of statistical 
-software*. 33(1): 1-22.  
+software*. 33(1): 1-22.
+
 Roost M.S., van Iperen L., Ariyurek Y., Buermans H.P., Arindrarto W.,
 Devalla H.D., Passier R., Mummery C.L., Carlotti F., de Koning E.J.P.,
 van Zwet E.W., Goeman J.J., and Chuva de Sousa Lopes S.M. (2015). KeyGenes, a
 tool to probe tissue differentiation using a human fetal transcriptional atlas.
-*Stem Cell Reports*. 4(6):1112-24.  
+*Stem Cell Reports*. 4(6):1112-24.
