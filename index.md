@@ -1,3 +1,3 @@
 ## Vignettes:
-- [v0.1](DavyCats.github.io/KeyGenes/v0.1.html)
+- [v0.1](v0.1.html)
 
