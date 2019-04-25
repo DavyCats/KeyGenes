@@ -1,3 +1,23 @@
+---
+title: "KeyGenes"
+package: "KeyGenes"
+author: 
+- name: "Davy Cats"
+  affiliation: 
+  - "Sequencing Analysis Support Core, Department of Biomedical Data Sciences, Leiden University Medical Center, Leiden, The Netherlands"
+  email: d.cats@lumc.nl
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: true
+    toc_float:
+      collapsed: false
+vignette: >
+  %\VignetteIndexEntry{Keygenes}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
 <!--
 Copyright (c) 2019 Leiden University Medical Center
 
@@ -19,25 +39,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 -->
----
-title: "KeyGenes"
-package: "KeyGenes"
-author: 
-- name: "Davy Cats"
-  affiliation: 
-  - "Sequencing Analysis Support Core, Department of Biomedical Data Sciences, Leiden University Medical Center, Leiden, The Netherlands"
-  email: d.cats@lumc.nl
-date: "`r Sys.Date()`"
-output: 
-  html_document:
-    toc: true
-    toc_float:
-      collapsed: false
-vignette: >
-  %\VignetteIndexEntry{Keygenes}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
----
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -52,7 +53,16 @@ of queried samples (test set) based on a provided group of samples (training
 set). It uses transcriptional profiles of the test set and matches them to the
 transcriptional profiles of the training set. KeyGenes uses 10-fold cross
 validation on the basis of LASSO (Least Absolute Shrinkage and Selection
-Operator) regression available in the `glmnet` R-package (Friedman et al., 2010).
+Operator) regression available in the `glmnet` R-package 
+(Friedman et al., 2010).
+
+# This vignette #
+This vignette will describe the usage of the `KeyGenes` R-package. First, the
+included dataset (usable as trainingdata) will be described. Secondly, the
+usage of the base KeyGenes algorithmm, the results and visualization of these
+results will be explained. Finally a full workflow for sample classification
+using KeyGenes will be given. This workflow can be used to automatically select
+the approriate training data for each test sample.
 
 # Included training data #
 Included in the KeyGenes package is a collection of RNA-seq count data usable
@@ -145,7 +155,7 @@ will draw a heatmap based on the `prediction.matrix`.
 keygenes.heatmap(result)
 ```
 
-# A more complex example #
+# Selecting training data automatically #
 In many cases it will be hard to tell exactly what data from the training set
 is most approriate for our test data. For example, when differentiating stem 
 cell it is unknow whether the resulting cells are more akin to fetal or adult 

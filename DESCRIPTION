@@ -1,7 +1,7 @@
 Package: KeyGenes
 Type: Package
 Title: Transciptional profile based sample class (tissue) identification
-Version: 0.1
+Version: 2.0.0
 Date: 2019-04-12
 Authors@R: c(
 	person("Mathias", "Roost", role=c("aut")),
