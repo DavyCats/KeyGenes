@@ -30,6 +30,7 @@ hESC2 <- "sourceData/hESC/2013-11-04_combined_all_data.csv"
 hESC2.data <- read.table(hESC2, sep=",", header=TRUE, row.names=1,
                          check.names=FALSE)[, "set_3_B6_GCCAAT_L005", drop=F]
 colnames(hESC2.data) <- "hESC stem cells.1"
+hESC2.data <- hESC2.data[! grepl("LRG_[0-9]+", row.names(hESC2.data)),, drop=F]
 fetal <- "sourceData/human_fetal/training_fetal.txt"
 fetal.data <- read.table(fetal, sep="\t", header=TRUE, row.names=1,
                          check.names=FALSE)
@@ -38,13 +39,13 @@ adult.data <- read.table(adult, sep="\t", header=TRUE, row.names=1,
                          check.names=FALSE)
 colnames(adult.data) <- make.names(colnames(adult.data), unique = T)
 
-all.genes <- union(rownames(hESC.data), rownames(hESC2.data))
-all.genes <- union(all.genes, rownames(fetal.data))
-all.genes <- union(all.genes, rownames(adult.data))
+all.genes <- union(row.names(hESC.data), row.names(hESC2.data))
+all.genes <- union(all.genes, row.names(fetal.data))
+all.genes <- union(all.genes, row.names(adult.data))
 
 missing.hESC <- setdiff(all.genes, row.names(hESC.data))
 missing.hESC2 <- setdiff(all.genes, row.names(hESC2.data))
-missing.fetal <- setdiff(all.genes, rownames(fetal.data))
+missing.fetal <- setdiff(all.genes, row.names(fetal.data))
 missing.adult <- setdiff(all.genes, row.names(adult.data))
 
 hESC.data[missing.hESC,] <- NA
@@ -54,7 +55,7 @@ adult.data[missing.adult,] <- NA
 
 setdiff(all.genes, row.names(hESC.data))
 setdiff(all.genes, row.names(hESC2.data))
-setdiff(all.genes, rownames(fetal.data))
+setdiff(all.genes, row.names(fetal.data))
 setdiff(all.genes, row.names(adult.data))
 
 all.counts <- cbind(hESC.data, hESC2.data)
@@ -74,9 +75,25 @@ organs <- sapply(strsplit(colnames(all.counts), "_"), "[[", 1)
 organs <- sapply(strsplit(organs, "\\."), "[[", 1)
 coldata[, "organ"] <- organs
 
+rowdata <- data.frame(row.names = row.names(all.counts))
+ensembl <- biomaRt::useMart("ensembl",dataset="hsapiens_gene_ensembl")
+ensembl_ids <- biomaRt::getBM(attributes = c("ensembl_gene_id", "hgnc_id", "hgnc_symbol"), mart=ensembl)
+
+# hgnc_id
+hgnc_id <- aggregate(hgnc_id ~ ensembl_gene_id, data=ensembl_ids, FUN=paste, collapse=";")
+row.names(hgnc_id) <- hgnc_id$ensembl_gene_id
+rowdata[,"hgnc_id"] <- hgnc_id[row.names(rowdata),"hgnc_id"]
+
+# symbol
+symbol <- aggregate(hgnc_symbol ~ ensembl_gene_id, data=ensembl_ids, FUN=paste, collapse=";")
+row.names(symbol) <- symbol$ensembl_gene_id
+rowdata[,"symbol"] <- symbol[row.names(rowdata),"hgnc_symbol"]
+
+rowdata[rowdata == ""] <- NA
+
 training.data <- SummarizedExperiment::SummarizedExperiment(
     assays=list(counts=as.matrix(all.counts)),
-    colData=coldata)
+    colData=coldata, rowData=rowdata)
 
 save(training.data, file="data/training.data.RData", compress = "xz", compression_level = 9)
 

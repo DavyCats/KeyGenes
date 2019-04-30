@@ -1,0 +1,15 @@
+CHANGES IN VERSION 2.0.0
+------------------------
+
+NOTE ON VERSION NUMBER
+    Version 1.x.x was skipped to distinguish between the original R scripts
+    and the KeyGenes package.
+
+MODIFICATIONS
+
+    o The vignette was modified to be more clear.
+    o Added description on getting gene symbols to vignette.
+    o The training.data object now contains the following alternative names 
+      for genes:
+        o HGNC id
+        o gene symbol

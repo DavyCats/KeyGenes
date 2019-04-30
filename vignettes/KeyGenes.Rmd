@@ -140,6 +140,22 @@ than 0) is returned.
 result@class.genes
 ```
 
+#### Getting gene symbols instead of ensembl ids ####
+The genes in the class.genes slot will be named in accordance with the names
+the were assigned in the count tables provided as input. For the provided
+training data these are ensembl ids. In the `rowData` for the `training.data`
+object additional gene names are provided (HGNC IDs and gene symbols). Note
+that these alternatives may not be available for all genes.
+
+If you want to see the `class.genes` as symbols, rather than ensembl ids, the
+following code can be used.
+```{r, gene.symbols}
+class.genes.symbols <- lapply(result@class.genes, function(x){
+    rowData(training.data[x,])[,"symbol"]
+})
+class.genes.symbols
+```
+
 ### The prediction.matrix slot ###
 The `prediction.matrix` slot contains linear predictor values. The final
 predictions are chosen by picking the class with the highest value for each
