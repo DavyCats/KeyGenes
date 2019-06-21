@@ -58,9 +58,11 @@ setdiff(all.genes, row.names(hESC2.data))
 setdiff(all.genes, row.names(fetal.data))
 setdiff(all.genes, row.names(adult.data))
 
-all.counts <- cbind(hESC.data, hESC2.data)
-all.counts <- cbind(all.counts, fetal.data)
-all.counts <- cbind(all.counts, adult.data)
+all.counts <- merge(hESC.data, hESC2.data, by=0)
+all.counts <- merge(all.counts, fetal.data, by.x=1, by.y=0)
+all.counts <- merge(all.counts, adult.data, by.x=1, by.y=0)
+row.names(all.counts) <- all.counts$Row.names
+all.counts <- all.counts[,colnames(all.counts) != "Row.names"]
 
 coldata <- data.frame(row.names = colnames(all.counts))
 
