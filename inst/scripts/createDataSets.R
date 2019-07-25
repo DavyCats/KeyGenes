@@ -75,6 +75,12 @@ coldata[grepl("hESC stem cells", colnames(all.counts)), "age"] <- "hESC stem cel
 # organ
 organs <- sapply(strsplit(colnames(all.counts), "_"), "[[", 1)
 organs <- sapply(strsplit(organs, "\\."), "[[", 1)
+females <- c("gonad_9", "gonad_16-18", "gonad_9.1", "gonad_adult", "gonad_adult.1", "gonad_adult.9")
+males <- c("gonad_16-18.1", "gonad_adult.2", "gonad_adult.3", "gonad_adult.4", "gonad_adult.5",
+           "gonad_adult.6", "gonad_adult.7", "gonad_adult.8", "gonad_adult.10")
+organs[which(colnames(all.counts) %in% females)] <- "ovary"
+organs[which(colnames(all.counts) %in% males)] <- "testes"
+organs[which(organs %in% c("heart V", "heart A"))] <- "heart"
 coldata[, "organ"] <- organs
 
 rowdata <- data.frame(row.names = row.names(all.counts))

@@ -13,3 +13,7 @@ MODIFICATIONS
       for genes:
         o HGNC id
         o gene symbol
+    o The samples labeled as gonad in the training.data object have been
+      separated into ovary and testes.
+    o The samples labeled as heart A and heart V have be relabeled as
+      heart.
