@@ -7,6 +7,8 @@ NOTE ON VERSION NUMBER
 
 MODIFICATIONS
 
+    o keygenes.NGS now adds confidence column to the results table. This
+      column will show if the prediction is high or low confidence.
     o The vignette was modified to be more clear.
     o Added description on getting gene symbols to vignette.
     o The training.data object now contains the following alternative names 
