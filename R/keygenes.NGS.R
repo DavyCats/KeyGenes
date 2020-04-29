@@ -103,6 +103,8 @@ keygenes.NGS <- function(test, train, train.classes, genes=NULL,
 #' @param genes The genes to be used for training and testing
 #' @param test.classes A vector with the classes of the test samples. Used to
 #' calculate accuracy. May be NULL
+#' @param confidence.cutoff The minimum prediction value for a prediction to be
+#' considered high confidence.
 #' @param verbose Should progress be reported, defaults to FALSE
 #'
 #' @return A  \link[KeyGenes]{KeyGenesResults} object containing the prediction 
@@ -110,7 +112,7 @@ keygenes.NGS <- function(test, train, train.classes, genes=NULL,
 #' @importFrom limma voom
 #' @importFrom glmnet cv.glmnet
 keygenes.NGS.run <- function(test, train, train.classes, genes,
-                        test.classes, verbose=FALSE) {
+                        test.classes, confidence.cutoff=0.7, verbose=FALSE) {
     if (verbose) message("Normalizing and filtering")
     # merge test and training sets and normalize together
     combined <- cbind(train, test)
@@ -185,7 +187,15 @@ keygenes.NGS.run <- function(test, train, train.classes, genes,
     prediction.matrix <- t(pred)
     result <- data.frame(row.names=rownames(pred),
                          truth=test.classes,
-                         predicted=colnames(pred)[apply(pred,1,which.max)])
+                         predicted=colnames(pred)[apply(pred,1,which.max)],
+                         confidence=apply(pred,1,function(x, cutoff){
+                             i <- which.max(x)
+                             if (x[i] >= cutoff) {
+                                 return("High")
+                             } else {
+                                 return("Low")
+                             }
+                         }, confidence.cutoff))
 
     # Determine accuracy
     if (verbose) message("calculating accuracy")
