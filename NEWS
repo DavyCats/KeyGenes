@@ -7,7 +7,7 @@ NOTE ON VERSION NUMBER
 
 MODIFICATIONS
 
-    o keygenes.NGS now adds confidence column to the results table. This
+    o keygenes.NGS now adds a confidence column to the results table. This
       column will show if the prediction is high or low confidence.
     o The vignette was modified to be more clear.
     o Added description on getting gene symbols to vignette.

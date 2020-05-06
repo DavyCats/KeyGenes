@@ -37,6 +37,8 @@
 #' @param test.classes See train.classes, but for the test samples. Used to
 #' calculate the accuracy of the predictions. If NULL the accuracy will be NaN.
 #' Defaults to NULL 
+#' @param confidence.cutoff The minimum prediction value for a prediction to be
+#' considered high confidence.
 #' @param verbose Should progress be reported, defaults to FALSE
 #'
 #' @return A \link[KeyGenes]{KeyGenesResults} object containing the prediction 
@@ -48,7 +50,8 @@
 #' data(fetal_wo)
 #' result <- keygenes.NGS(adult, fetal_wo, "tissue")
 keygenes.NGS <- function(test, train, train.classes, genes=NULL,
-                        test.classes=NULL, verbose=FALSE) {
+                         test.classes=NULL, confidence.cutoff=0.7,
+                         verbose=FALSE) {
     if (extends(class(train), "SummarizedExperiment")) {
         suppressPackageStartupMessages(require(SummarizedExperiment))
         train.classes <- as.character(colData(train)[,train.classes])
@@ -87,7 +90,7 @@ keygenes.NGS <- function(test, train, train.classes, genes=NULL,
     }
     
     keygenes.NGS.run(test, train, train.classes, genes,
-                     test.classes, verbose)
+                     test.classes, confidence.cutoff, verbose)
 }
 
 
