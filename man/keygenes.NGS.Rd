@@ -4,8 +4,15 @@
 \alias{keygenes.NGS}
 \title{Predict the class (eg. organ) for NGS (RNA-seq) samples}
 \usage{
-keygenes.NGS(test, train, train.classes, genes = NULL, test.classes = NULL,
-  verbose = FALSE)
+keygenes.NGS(
+  test,
+  train,
+  train.classes,
+  genes = NULL,
+  test.classes = NULL,
+  confidence.cutoff = 0.7,
+  verbose = FALSE
+)
 }
 \arguments{
 \item{test}{The counts table of the test data or a SummarizedExperiment 
@@ -26,6 +33,9 @@ NULL}
 \item{test.classes}{See train.classes, but for the test samples. Used to
 calculate the accuracy of the predictions. If NULL the accuracy will be NaN.
 Defaults to NULL}
+
+\item{confidence.cutoff}{The minimum prediction value for a prediction to be
+considered high confidence.}
 
 \item{verbose}{Should progress be reported, defaults to FALSE}
 }

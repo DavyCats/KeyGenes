@@ -4,8 +4,10 @@
 \name{training.data}
 \alias{training.data}
 \title{Training data}
-\format{An object of class \code{"SummarizedExperiment"}; see 
-\code{\link[SummarizedExperiment]{SummarizedExperiment}}.}
+\format{
+An object of class \code{"SummarizedExperiment"}; see 
+\code{\link[SummarizedExperiment]{SummarizedExperiment}}.
+}
 \usage{
 data(training.data)
 }

@@ -4,8 +4,15 @@
 \alias{keygenes.NGS.run}
 \title{Predict the class (eg. organ) for NGS (RNA-seq) samples}
 \usage{
-keygenes.NGS.run(test, train, train.classes, genes, test.classes,
-  verbose = FALSE)
+keygenes.NGS.run(
+  test,
+  train,
+  train.classes,
+  genes,
+  test.classes,
+  confidence.cutoff = 0.7,
+  verbose = FALSE
+)
 }
 \arguments{
 \item{test}{A matrix of expression measures for the test set}
@@ -19,6 +26,9 @@ sample from the test set will be assigned to one of these}
 
 \item{test.classes}{A vector with the classes of the test samples. Used to
 calculate accuracy. May be NULL}
+
+\item{confidence.cutoff}{The minimum prediction value for a prediction to be
+considered high confidence.}
 
 \item{verbose}{Should progress be reported, defaults to FALSE}
 }
