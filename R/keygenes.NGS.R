@@ -69,7 +69,7 @@ keygenes.NGS <- function(test, train, train.classes, genes=NULL,
     test <- as.matrix(test)
     train <- as.matrix(train)
     common.genes <- intersect(row.names(train), row.names(test))
-    test <- test[common.genes,]
+    test <- test[common.genes,,drop=F]
     train <- train[common.genes,]
     
     # drop classes with only one sample
@@ -128,7 +128,7 @@ keygenes.NGS.run <- function(test, train, train.classes, genes,
     train.i <- 1:ncol(train) # indices for train samples
     test.i <- (1 + ncol(train)) : (ncol(train) + ncol(test)) # indices for test samples
     norm.train <- norm.filtered[train.i,]
-    norm.test <- norm.filtered[test.i,]
+    norm.test <- norm.filtered[test.i,,drop=F]
     
     # determine folds
     if (verbose) message("Determining folds")
@@ -185,8 +185,11 @@ keygenes.NGS.run <- function(test, train, train.classes, genes,
     
     # make prediction for the test set
     if (verbose) message("Making predicions")
-    pred <- drop(predict(cvfit, newx=norm.test, type="response", 
-                         s=cvfit$lambda.min))
+    pred <- predict(cvfit, newx=norm.test, type="response",
+                         s=cvfit$lambda.min)
+    cols <- dimnames(pred)[[2]]
+    pred <- as.data.frame(pred)
+    colnames(pred) <- cols
     prediction.matrix <- t(pred)
     result <- data.frame(row.names=rownames(pred),
                          truth=test.classes,

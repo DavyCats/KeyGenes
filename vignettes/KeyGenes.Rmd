@@ -208,14 +208,8 @@ organ.results <- sapply(ages, function(age) {
         # Select the samples for each age.
         train.subset <- training.set[, training.set$age == age]
         test.subset <- test.set[, age.result@result$predicted == age]
-        # Test sets need at least two samples
-        if (ncol(test.subset) < 2) {
-            test.subset <- cbind(test.subset, test.subset)
-            colnames(test.subset) <- c(colnames(test.subset)[1], "duplicate")
-        }
         # Run KeyGenes for each subset.
-        #return(keygenes.NGS(test.subset, train.subset, "organ"))
-        r <- keygenes.NGS(test.subset, train.subset, "organ")
+        keygenes.NGS(test.subset, train.subset, "organ")
     }
 })
 names(organ.results) <- ages
@@ -228,7 +222,6 @@ if (length(organ.results) > 1) {
         all.organs <- rbind(all.organs, organ.results[[x]]@result)
     }
 }
-all.organs <- all.organs[rownames(all.organs) != c("duplicate"),]
 all.organs
 ```
 
@@ -247,7 +240,7 @@ melted.prediction.matrix.list <- lapply(names(organ.results), function(age) {
     melted["age"] <- age
     # Label it as a tissue prediction value
     melted["type"] <- "tissue"
-    melted <- melted[melted$Var2 != "duplicate",]
+    melted
 })
 
 # Merge all the ages into one table
